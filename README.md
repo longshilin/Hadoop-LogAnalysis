@@ -1,35 +1,56 @@
 # 基于论坛的apache common日志分析项目
 ## 项目描述
-通过对技术论坛的apache common日志进行分析，计算论坛关键指标，供运营者决策。
-
+通过对技术论坛的apache common日志进行分析，开发该系统的目的是分了获取一些业务相关的指标，这些指标在第三方工具中无法获得的；计算论坛关键指标，供运营者决策。
 ## 项目设计
-- MapReduce程序计算KPI
-- HBASE详单查询
-- HIVE数据仓库多维分析
+1.把日志数据上传到HDFS中进行处理				
+- 如果是日志服务器数据较小、压力较小，可以直接使用shell命令把数据上传到HDFS中；			
+- 如果是日志服务器数据较大、压力较答，使用NFS在另一台服务器上上传数据；
+- 如果日志服务器非常多、数据量大，使用flume进行数据处理；
+
+2.使用MapReduce对HDFS中的原始数据进行清洗；
+
+3.使用Hive对清洗后的数据进行统计分析；
+
+4.使用Sqoop把Hive产生的统计结果导出到mysql中；
+
+5.如果用户需要查看详细数据的话，可以使用HBase进行展现；
 
 ![日志报告分析](https://i.imgur.com/q2Bl7G6.png)
 
+<a href="#123">sfdfs</a>
+
+
 ## 开发步骤：
+
+- 使用flume把日志数据导入
+- MapReduce程序计算KPI
+- HBASE详单查询
+- HIVE数据仓库多维分析
+- sqoop导出分析数据
+- 编写定时任务调度脚本
+
 ### 使用flume把日志数据导入到hdfs中<后续补充>
-	技术：flume(源是文件夹，目的是hdfs和hbase，管道是文件)
+>技术：flume(源是文件夹，目的是hdfs和hbase，管道是文件)
+
 ### 对数据进行清洗
-	技术：mapreduce
+>技术：mapreduce
+
 源码 [bbsCleaner.java](/src/com/elon33/bbs/bbsCleaner.java "点击此处查看源码")
 
-**数据清洗结果**
-
-	hadoop fs -cat /user/elon/bbs_cleaned/2013_05_30/part-r-00000
+数据清洗结果
+>hadoop fs -cat /user/elon/bbs_cleaned/2013_05_30/part-r-00000
 	
 ![](https://i.imgur.com/6PPetpR.png)
 ### 明细日志使用hbase存储，能够利用ip、时间查询
-	技术：设计表、预分区
+>技术：设计表、预分区
+
 源码 [bbsHBase.java](/src/com/elon33/bbs/bbsHBase.java "点击此处查看源码")
 
-**HBase中 bbs_log表存储结果**
+HBase中 bbs_log表存储结果
 ![](https://i.imgur.com/vOGjQt7.png)
-### 使用hive进行数据的多维分析
-	技术：hive(表、视图)、自定义函数
 
+### 使用hive进行数据的多维分析
+>技术：hive(表、视图)、自定义函数
 
 	## 存放数据的主分区表
 	hive -e "ALTER TABLE bbs ADD PARTITION(logdate='2013_05_30') LOCATION 'hdfs://hadoop:9000/user/elon/bbs_cleaned/2013_05_30';"
@@ -50,11 +71,12 @@
 	## 以上四个结果汇总到一张表统计
 	hive -e "CREATE TABLE bbs_2013_05_30 AS SELECT '2013_05_30', a.pv, b.reguser, c.ip, d.jumper FROM bbs_pv_2013_05_30 a JOIN bbs_reguser_2013_05_30 b ON 1=1 JOIN bbs_ip_2013_05_30 c ON 1=1 JOIN bbs_jumper_2013_05_30 d ON 1=1;"
 
-**汇总表结果**
+汇总表结果
 ![](https://i.imgur.com/u5Kbhiq.png)
 
 ### 把hive分析结果使用sqoop导出到mysql中
-	技术：sqoop、MySQL
+>技术：sqoop、MySQL
+
 创建bbs表
 ![](https://i.imgur.com/s8mmGHM.png)
 
@@ -73,3 +95,4 @@
 2.在 [ bbs_daily.sh](/bbs_daily.sh "点击此处查看源码") 脚本中每日调度一次`bbs_common.sh`脚本，传入每日的日期参数，实现任务调度。
 
 3.在 [bbs_common.sh](/bbs_common.sh "点击此处查看源码") 调用命令脚本实现日志分析过程，得到分析指标结果。
+<a name="123">sfdfs</a>

@@ -1,1 +1,1 @@
-* 1 * * * bbs_daily.sh
+* 1 * * * bbs_daily.sh 			# 每天凌晨一点定时调用
