@@ -35,7 +35,8 @@
 源码 [bbsCleaner.java](/src/com/elon33/bbs/bbsCleaner.java "点击此处查看源码")
 
 数据清洗结果
->hadoop fs -cat /user/elon/bbs_cleaned/2013_05_30/part-r-00000
+
+	hadoop fs -cat /user/elon/bbs_cleaned/2013_05_30/part-r-00000
 	
 ![](https://i.imgur.com/6PPetpR.png)
 ### <a name="3">明细日志使用hbase存储，能够利用ip、时间查询</a>
