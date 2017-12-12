@@ -17,22 +17,19 @@
 
 ![日志报告分析](https://i.imgur.com/q2Bl7G6.png)
 
-<a href="#123">sfdfs</a>
-
-
 ## 开发步骤：
 
-- 使用flume把日志数据导入
-- MapReduce程序计算KPI
-- HBASE详单查询
-- HIVE数据仓库多维分析
-- sqoop导出分析数据
-- 编写定时任务调度脚本
+- <a href="#1">使用flume把日志数据导入</a>
+- <a href="#2">MapReduce程序计算KPI</a>
+- <a href="#3">HBASE详单查询</a>
+- <a href="#4">HIVE数据仓库多维分析</a>
+- <a href="#5">sqoop导出分析数据</a>
+- <a href="#6">编写定时任务调度脚本</a>
 
-### 使用flume把日志数据导入到hdfs中<后续补充>
+### <a name="1">使用flume把日志数据导入到hdfs中<后续补充></a>
 >技术：flume(源是文件夹，目的是hdfs和hbase，管道是文件)
 
-### 对数据进行清洗
+### <a name="2">对数据进行清洗</a>
 >技术：mapreduce
 
 源码 [bbsCleaner.java](/src/com/elon33/bbs/bbsCleaner.java "点击此处查看源码")
@@ -41,7 +38,7 @@
 >hadoop fs -cat /user/elon/bbs_cleaned/2013_05_30/part-r-00000
 	
 ![](https://i.imgur.com/6PPetpR.png)
-### 明细日志使用hbase存储，能够利用ip、时间查询
+### <a name="3">明细日志使用hbase存储，能够利用ip、时间查询</a>
 >技术：设计表、预分区
 
 源码 [bbsHBase.java](/src/com/elon33/bbs/bbsHBase.java "点击此处查看源码")
@@ -49,7 +46,7 @@
 HBase中 bbs_log表存储结果
 ![](https://i.imgur.com/vOGjQt7.png)
 
-### 使用hive进行数据的多维分析
+### <a name="4">使用hive进行数据的多维分析</a>
 >技术：hive(表、视图)、自定义函数
 
 	## 存放数据的主分区表
@@ -74,7 +71,7 @@ HBase中 bbs_log表存储结果
 汇总表结果
 ![](https://i.imgur.com/u5Kbhiq.png)
 
-### 把hive分析结果使用sqoop导出到mysql中
+### <a name="5">把hive分析结果使用sqoop导出到mysql中</a>
 >技术：sqoop、MySQL
 
 创建bbs表
@@ -86,7 +83,7 @@ HBase中 bbs_log表存储结果
 
 当最终分析的论坛指标数据导出到MySQL中时，之前那些临时表就可以删除了。在下面的自动调度中，实现临时表删除。
 
-### 最后，使用linux的crontab做自动调度
+### <a name="6">最后，使用linux的crontab做自动调度</a>
 
 要想通过脚本实现每天自动调度进行日志分析，就必须用到shell脚本，将命令都封装在shell脚本中，通过每天日期的迭代和定时任务设置，实现自动调度分析日志。
 
@@ -95,4 +92,3 @@ HBase中 bbs_log表存储结果
 2.在 [ bbs_daily.sh](/bbs_daily.sh "点击此处查看源码") 脚本中每日调度一次`bbs_common.sh`脚本，传入每日的日期参数，实现任务调度。
 
 3.在 [bbs_common.sh](/bbs_common.sh "点击此处查看源码") 调用命令脚本实现日志分析过程，得到分析指标结果。
-<a name="123">sfdfs</a>
