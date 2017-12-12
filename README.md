@@ -70,6 +70,6 @@
 
 1.在 [crontab -e](/crontab -e "点击此处查看源码") 中实现定时任务设置。
 
-2.在[ bbs_daily.sh](/bbs_daily.sh) 脚本中每日调度一次`bbs_common.sh`脚本，传入每日的日期参数，实现任务调度。
+2.在 [ bbs_daily.sh](/bbs_daily.sh "点击此处查看源码") 脚本中每日调度一次`bbs_common.sh`脚本，传入每日的日期参数，实现任务调度。
 
-3.在[bbs_common.sh](/bbs_common.sh) 调用命令脚本实现日志分析过程，得到分析指标结果。
+3.在 [bbs_common.sh](/bbs_common.sh "点击此处查看源码") 调用命令脚本实现日志分析过程，得到分析指标结果。
