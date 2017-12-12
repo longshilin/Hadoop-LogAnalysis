@@ -27,10 +27,10 @@
 - <a href="#6">编写定时任务调度脚本</a>
 
 ### <a name="1">使用flume把日志数据导入到hdfs中<后续补充></a>
->技术：flume(源是文件夹，目的是hdfs和hbase，管道是文件)
+>flume(源是文件夹，目的是hdfs和hbase，管道是文件)
 
 ### <a name="2">对数据进行清洗</a>
->技术：mapreduce
+>mapreduce
 
 源码 [bbsCleaner.java](/src/com/elon33/bbs/bbsCleaner.java "点击此处查看源码")
 
@@ -39,7 +39,7 @@
 	
 ![](https://i.imgur.com/6PPetpR.png)
 ### <a name="3">明细日志使用hbase存储，能够利用ip、时间查询</a>
->技术：设计表、预分区
+>设计表、预分区
 
 源码 [bbsHBase.java](/src/com/elon33/bbs/bbsHBase.java "点击此处查看源码")
 
@@ -47,7 +47,7 @@ HBase中 bbs_log表存储结果
 ![](https://i.imgur.com/vOGjQt7.png)
 
 ### <a name="4">使用hive进行数据的多维分析</a>
->技术：hive(表、视图)、自定义函数
+>hive(表、视图)、自定义函数
 
 	## 存放数据的主分区表
 	hive -e "ALTER TABLE bbs ADD PARTITION(logdate='2013_05_30') LOCATION 'hdfs://hadoop:9000/user/elon/bbs_cleaned/2013_05_30';"
@@ -72,7 +72,7 @@ HBase中 bbs_log表存储结果
 ![](https://i.imgur.com/u5Kbhiq.png)
 
 ### <a name="5">把hive分析结果使用sqoop导出到mysql中</a>
->技术：sqoop、MySQL
+>sqoop、MySQL
 
 创建bbs表
 ![](https://i.imgur.com/s8mmGHM.png)
