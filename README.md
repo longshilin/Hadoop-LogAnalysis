@@ -17,6 +17,8 @@
 
 ![日志报告分析](https://i.imgur.com/q2Bl7G6.png)
 
+
+
 ## 开发步骤：
 
 - <a href="#1">使用flume把日志数据导入</a>
@@ -26,8 +28,12 @@
 - <a href="#5">sqoop导出分析数据</a>
 - <a href="#6">编写定时任务调度脚本</a>
 
-### <a name="1">使用flume把日志数据导入到hdfs中<后续补充></a>
+### <a name="1">使用flume把日志数据导入到hdfs中</a>
 >flume(源是文件夹，目的是hdfs和hbase，管道是文件)
+
+flume配置文件(从本地监控目录上传日志文件到hdfs中)
+
+[flume-hdfs.conf](./flume-hdfs.conf)
 
 ### <a name="2">对数据进行清洗</a>
 >mapreduce
